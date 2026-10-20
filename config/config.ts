@@ -8,6 +8,12 @@
  */
 
 import type { Config } from './config.example';
+import { config as exampleConfig } from './config.example';
 
-export const config = {} satisfies Partial<Config>;
-
+export const config = {
+  // Job alerts are off in production until an Encharge write key is configured
+  jobAlerts: {
+    ...exampleConfig.jobAlerts,
+    enabled: process.env.NODE_ENV !== 'production',
+  },
+} satisfies Partial<Config>;

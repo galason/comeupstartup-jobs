@@ -353,7 +353,7 @@ export const config = {
   // Job Alerts Configuration
   jobAlerts: {
     // Enable or disable the job alerts feature
-    enabled: true,
+    enabled: true as boolean,
 
     // Show job alerts link in navigation
     showInNavigation: true,
