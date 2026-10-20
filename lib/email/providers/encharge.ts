@@ -20,10 +20,6 @@ export class EnchargeProvider implements EmailProvider {
       enchargeConfig.writeKey || process.env.ENCHARGE_WRITE_KEY || '';
     this.defaultTags = enchargeConfig.defaultTags || 'job-alerts-subscriber';
     this.eventName = enchargeConfig.eventName || 'Job Alert Subscription';
-
-    if (!this.writeKey && process.env.NODE_ENV === 'production') {
-      throw new Error('Encharge write key is required in production');
-    }
   }
 
   async subscribe(data: SubscriberData) {
@@ -31,6 +27,11 @@ export class EnchargeProvider implements EmailProvider {
       // In development without a key, simulate success
       if (!this.writeKey && process.env.NODE_ENV === 'development') {
         return { success: true };
+      }
+
+      // Validate at request time (not construction) so builds succeed without the key
+      if (!this.writeKey) {
+        throw new Error('Encharge write key is required in production');
       }
 
       // Format the payload for Encharge
